@@ -1,0 +1,20 @@
+Academic Dates::
+mid term - 1-6 Mar
+mid sem break - 22-28 Mar
+Practical & Project examination - 12-16 Apr
+
+Project timelines::
+	Study : 15 Feb
+	Sign to speech:
+		Data Collection -23 Feb
+		Training - 25 Feb
+		Testing - 27 Feb
+
+	 Speech to Sign:
+		Data Collection- 16 Mar
+		Training - 18 Mar
+		Testing - 20 Mar
+
+	Ultimate UI generation - 22 Mar
+	Addition of features -25 Mar 
+Deadline - 1 Apr
