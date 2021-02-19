@@ -28,14 +28,5 @@ model.compile(loss="binary_crossentropy",
              optimizer="adam",
              metrics=['accuracy'])
 
-model.fit(x, y, batch_size=32, epochs=10, validation_split=0.1)
-"""
-Traceback (most recent call last):
-  File "d:/Project/gesture-Speech/Gesture-Speech/trainingCNN.py", line 31, in <module>
-    model.fit(x, y, batch_size=32, epochs=10, validation_split=0.1)
-  File "C:\Users\rushi\AppData\Local\Programs\Python\Python38\lib\site-packages\tensorflow\python\keras\engine\training.py", line 1040, in fit
-    data_adapter.train_validation_split(
-  File "C:\Users\rushi\AppData\Local\Programs\Python\Python38\lib\site-packages\tensorflow\python\keras\engine\data_adapter.py", line 1357, in train_validation_split
-    raise ValueError(
-ValueError: `validation_split` is only supported for Tensors or NumPy arrays, found following types in the input: [<class 'int'>, <class 'int'>, <class 'int'>, <class 'int'>, <class 'int'>,...<class 'int'>]
-"""
+model.fit(x, y, batch_size=1, epochs=1, validation_split=0.1) # change parameters to increase accuracy of data
+
