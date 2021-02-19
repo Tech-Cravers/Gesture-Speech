@@ -4,7 +4,7 @@ from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten, Conv2D,
 import pickle
 import numpy as np
 
-x =np.array(pickle.load(open("X.pickle","rb")))
+x = pickle.load(open("x.pickle","rb"))
 y = pickle.load(open("y.pickle","rb"))
 
 x=x/255.0

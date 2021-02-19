@@ -91,20 +91,21 @@ import random
 
 random.shuffle(training_data)
 
-X = []
+x = []
 y = []
 
 for features,label in training_data:
-    X.append(features)
+    x.append(features)
     y.append(label)
 
-X = np.array(X).reshape(-1, IMG_SIZE, IMG_SIZE, 1)
+x = np.array(x).reshape(-1, IMG_SIZE, IMG_SIZE, 1)
+y = np.array(y)
 
 #Let's save this data, so that we don't need to keep calculating it every time we want to play with the neural network model:
 import pickle
 
-pickle_out = open("X.pickle","wb")
-pickle.dump(X, pickle_out)
+pickle_out = open("x.pickle","wb")
+pickle.dump(x, pickle_out)
 pickle_out.close()
 
 pickle_out = open("y.pickle","wb")
