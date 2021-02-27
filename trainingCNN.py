@@ -28,5 +28,5 @@ model.compile(loss="binary_crossentropy",
              optimizer="adam",
              metrics=['accuracy'])
 
-model.fit(x, y, batch_size=1, epochs=1, validation_split=0.1) # change parameters to increase accuracy of data
+model.fit(x, y, batch_size=3, epochs=3, validation_split=0.05) # change parameters to increase accuracy of data
 
