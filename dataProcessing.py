@@ -25,6 +25,7 @@ def resizeIt(img,size=100):
 #choose the directory u want to process in which video data is present 
 # videos must be named after the small case letter, it represents in gesture of hand
 DATADIR = "D:\Project\gesture-Speech\\americanData"
+PROC_DIR= "D:\Project\gesture-Speech\\processed_image"
 
 ALPHABET = [] #array containing letters to categorize and create path to video
 alpha = 'a'
@@ -42,6 +43,8 @@ for category in ALPHABET:
 #    print(path)
     cap = cv2.VideoCapture(path) #to load video file 
 
+    #counting frames processed
+    count = 0
     #stores index of every alphabet to categorize
     class_num =ALPHABET.index(category) # get the classification  (0 or 1 or 2 and soo on). 0=a 1=b 2=c ...
 
@@ -52,7 +55,7 @@ for category in ALPHABET:
         #to exit when frames are over or video is fully iterated
         if ret==False:
             break
-        
+        count
         #conversion of image to grayscale
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         #print(gray.shape)
@@ -71,7 +74,15 @@ for category in ALPHABET:
         #print(len(training_data))
 
         #use to save images
-        #cv2.imwrite("result.bmp",croped_image)
+        newpath = r'D:\\Project\\gesture-Speech\\processed_image\\' 
+        newpath = newpath+category
+        if not os.path.exists(newpath):
+            os.makedirs(newpath)# create folder if not present
+        
+        full_path = os.path.join(PROC_DIR,category,str(count))+'.bmp'
+        cv2.imwrite(full_path, img)
+        count=count+1 #updating to next value
+        print("saved image no. "+str(count)+" to location : "+full_path)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):#break ongoing process by Q
             break
