@@ -30,3 +30,4 @@ model.compile(loss="binary_crossentropy",
 
 model.fit(x, y, batch_size=3, epochs=3, validation_split=0.05) # change parameters to increase accuracy of data
 
+model.save('model_name.model')//finally saving the model
