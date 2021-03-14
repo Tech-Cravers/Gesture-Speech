@@ -1,8 +1,11 @@
 import cv2
 import tensorflow as tf
 
-CATEGORIES = ["Dog", "Cat"]
-//still need to change to alphabets
+ALPHABET = [] #array containing letters to categorize 
+alpha = 'a'
+for i in range(0, 26): 
+    ALPHABET.append(alpha) 
+    alpha = chr(ord(alpha) + 1)
 
 def prepare(filepath):
     IMG_SIZE = 70  # change in accordance to input of model
@@ -11,8 +14,9 @@ def prepare(filepath):
     return new_array.reshape(-1, IMG_SIZE, IMG_SIZE, 1)
 
 
-model = tf.keras.models.load_model("64x3-CNN.model")
+model = tf.keras.models.load_model("model_name.model")
 
-prediction = model.predict([prepare('doggo.jpg')])
+//test image is given as jpg format here
+prediction = model.predict([prepare('test0.jpg')])
 print(prediction)  # will be a list in a list.
-print(CATEGORIES[int(prediction[0][0])])
+print(ALPHABET[int(prediction[0][0])])
