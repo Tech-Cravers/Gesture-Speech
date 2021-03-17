@@ -8,23 +8,23 @@ import cv2
 import pickle
 import numpy as np
 
-x = pickle.load(open("/x.pickle","rb"))
-y = pickle.load(open("/y.pickle","rb"))
+x = pickle.load(open("x.pickle","rb"))
+y = pickle.load(open("y.pickle","rb"))
 
 #normalisation
 x=x/255.0
 
 
-dense_layers = [0,1,2]
-layer_sizes = [32,64,128]
-conv_layers = [1,2,4]
+dense_layers = [1]
+layer_sizes = [32]
+conv_layers = [4]
 
 for dense_layer in dense_layers:
     for layer_size in layer_sizes:
         for conv_layer in conv_layers:
             NAME = "{}-conv-{}-nodes-{}-dense-{}".format(conv_layer, layer_size, dense_layer, int(time.time()))
             print(NAME)
-            tensorboard = TensorBoard (log_dir="/logs/{}".format(NAME))
+            tensorboard = TensorBoard (log_dir="logs/{}".format(NAME))
             model = Sequential() #a sequential cnn model to create
 
             #added a neuron to network
@@ -52,4 +52,4 @@ for dense_layer in dense_layers:
                         metrics=['accuracy'])
 
             model.fit(x, y, batch_size=4, epochs=1, validation_split=0.1, callbacks=[tensorboard]) # change parameters to increase accuracy of data
-#            model.save('/model_name.model')#finally saving the model
+            model.save('model_name.model')#finally saving the model
