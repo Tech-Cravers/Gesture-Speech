@@ -75,11 +75,13 @@ for category in ALPHABET:
         #cv2.imshow('resized',resized_img)
         #cv2.waitKey(0)
 
+        #canny not using 
+        '''
         edge_map = cv2.Canny(resized_img,50,150)
         img = edge_map
         cv2.imshow('Result',img)# to give visual of each frame being processed
         #cv2.waitKey(0)
-
+        '''
         training_data.append([img, class_num])  # add image and classification to our training_data
 
         #use to save images
@@ -124,11 +126,11 @@ y = np.array(y)
 #Let's save this data, so that we don't need to keep calculating it every time we want to play with the neural network model:
 import pickle
 
-pickle_out = open("x.pickle","wb")
+pickle_out = open("/x.pickle","wb")
 pickle.dump(x, pickle_out)
 pickle_out.close()
 
-pickle_out = open("y.pickle","wb")
+pickle_out = open("/y.pickle","wb")
 pickle.dump(y, pickle_out)
 pickle_out.close()
 print('Pickle file created successfully named <X.pickle> and <Y.pickle> !!!')
