@@ -126,11 +126,11 @@ y = np.array(y)
 #Let's save this data, so that we don't need to keep calculating it every time we want to play with the neural network model:
 import pickle
 
-pickle_out = open("/x.pickle","wb")
+pickle_out = open("x.pickle","wb")
 pickle.dump(x, pickle_out)
 pickle_out.close()
 
-pickle_out = open("/y.pickle","wb")
+pickle_out = open("y.pickle","wb")
 pickle.dump(y, pickle_out)
 pickle_out.close()
 print('Pickle file created successfully named <X.pickle> and <Y.pickle> !!!')
