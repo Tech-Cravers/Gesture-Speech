@@ -12,7 +12,6 @@ import os
 def cropIt(gray,top=10,left=290,right=290,down=10):
     w, h = gray.shape
     croped_image = gray[top:(w-down), right:(h-left)]
-    #print(gray.shape)
     return croped_image
 
 #to normalize the images to same no. of pixels
@@ -24,18 +23,11 @@ def resizeIt(img,size=100,median=8):
     filtered_img=sci.median_filter(resized_img,median)
     return np.uint8(filtered_img)
 
-
-def prepare(img0):
-    IMG_SIZE = 200  # change in accordance to input of model
-    img0=np.float32(img0)
-
-    img_cropped = cropIt(img0,10,145,145,10)
-    #cv2.imshow(" ",np.uint8(img_cropped))
-    #cv2.waitKey(0)
-    img_resized=resizeIt(img_cropped,IMG_SIZE,5) # resize to normalize data size
+def preprocessing(img0):
+    IMG_SIZE=200
+    img_resized=resizeIt(img0,IMG_SIZE,5) # resize to normalize data size
     #ret,imgTh0=cv2.threshold(img_resized, 20, 255,cv2.THRESH_BINARY)
     imgTh=cv2.adaptiveThreshold(img_resized,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,7,5)
-    #print(imgTh.shape)
     return imgTh
 
 ALPHABET = [] #array containing letters to categorize 
@@ -43,7 +35,7 @@ alpha = 'a'
 for i in range(0, 26): 
     ALPHABET.append(alpha) 
     alpha = chr(ord(alpha) + 1)
-
+prev=""
 model = tf.keras.models.load_model("model_name.model")
 cap = cv2.VideoCapture(0) #to load video file 
 while(True):
@@ -53,18 +45,24 @@ while(True):
         break
     # Our operations on the frame come here
     img_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    img_test = prepare(img_gray)
+    img_test = preprocessing(img_gray)
 
     # Display the resulting frame
     cv2.imshow('testing this',np.uint8(img_test))
-    IMG_SIZE = 200
+    IMG_SIZE = 128
     prediction = model.predict([img_test.reshape(-1, IMG_SIZE, IMG_SIZE, 1)])
-    text = ALPHABET[int(prediction[0][0])]
-    #print(prediction)  # will be a list in a list.
-    print(text)
+    #print(img_test)
+    
+    text = print( ALPHABET[int(np.argmax(prediction[0]))])
+    
+    #print(prediction[0])  # will be a list in a list.
+    
+    now=text
+    if now!=prev:
+        print(text)
+    prev=text
 
-
-  
+    '''
     # The text that you want to convert to audio 
     mytext = str(text)
   
@@ -79,14 +77,17 @@ while(True):
   
     # Saving the converted audio in a mp3 file named 
     # welcome  
-    myobj.save("welcome.mp3") 
-  
+    myobj.save("audio.mp3") 
+
     # Playing the converted file 
-    os.system("mpg321 welcome.mp3") 
+    os.system("mpg123 welcome.mp3")
     
+    from playsound import playsound
+    playsound('audio.mp3')
+    '''
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
-
+    
 
 # When everything done, release the capture
 cap.release()
