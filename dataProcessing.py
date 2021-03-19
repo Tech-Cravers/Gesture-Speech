@@ -17,14 +17,15 @@ def resizeIt(img,size=100):
     img=np.float32(img)
     r,c=img.shape
     #filtering then resizing image
-    filtered_img=sci.gaussian_filter(img,10)
-    resized_img=cv2.resize(filtered_img,(size,size))
-    return np.uint8(resized_img)
+    resized_img=cv2.resize(img,(size,size))
+    filtered_img=sci.median_filter(resized_img,8)
+    return np.uint8(filtered_img)
 
 
 #choose the directory u want to process in which video data is present 
 # videos must be named after the small case letter, it represents in gesture of hand
 DATADIR = "D:\Project\gesture-Speech\\americanData"
+PROC_DIR= "D:\Project\gesture-Speech\\processed_image"
 
 ALPHABET = [] #array containing letters to categorize and create path to video
 alpha = 'a'
@@ -35,6 +36,7 @@ for i in range(0, 26):
 
 #contains the data set to be extracted
 training_data=[] # [ feature , label ]format 
+print(ALPHABET)
 
 #to iterate over every alphabet
 for category in ALPHABET:
@@ -42,8 +44,11 @@ for category in ALPHABET:
 #    print(path)
     cap = cv2.VideoCapture(path) #to load video file 
 
+    #counting frames processed
+    count = 0
     #stores index of every alphabet to categorize
     class_num =ALPHABET.index(category) # get the classification  (0 or 1 or 2 and soo on). 0=a 1=b 2=c ...
+#    print(class_num)
 
     #iterates over every frame of video
     while(cap.isOpened() ):
@@ -57,21 +62,38 @@ for category in ALPHABET:
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         #print(gray.shape)
         #cv2.imshow('input gray',gray)
+        #cv2.waitKey(0)
 
         #cropping using custom function
-        croped_image=cropIt(gray) #cropping image to get symmetric dimensions
+        croped_img=cropIt(gray) #cropping image to get symmetric dimensions
+        #cv2.imshow('cropped',croped_image)
+        #cv2.waitKey(0)
 
         #normalising using custom function
-        IMG_SIZE=100
-        img=resizeIt(croped_image,IMG_SIZE) # resize to normalize data size
-        #print(croped_image.shape)
+        IMG_SIZE=500
+        resized_img=resizeIt(croped_img,IMG_SIZE) # resize to normalize data size
+        #cv2.imshow('resized',resized_img)
+        #cv2.waitKey(0)
+
+        #canny not using 
+        '''
+        edge_map = cv2.Canny(resized_img,50,150)
+        img = edge_map
         cv2.imshow('Result',img)# to give visual of each frame being processed
-          
+        #cv2.waitKey(0)
+        '''
         training_data.append([img, class_num])  # add image and classification to our training_data
-        #print(len(training_data))
 
         #use to save images
-        #cv2.imwrite("result.bmp",croped_image)
+        newpath = r'D:\\Project\\gesture-Speech\\processed_image\\' 
+        newpath = newpath+category
+        if not os.path.exists(newpath):
+            os.makedirs(newpath)# create folder if not present
+        
+        full_path = os.path.join(PROC_DIR,category,str(count))+'.bmp'
+        cv2.imwrite(full_path, img)
+        count=count+1 #updating to next value
+        print("saved image no. "+str(count)+" to location : "+full_path)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):#break ongoing process by Q
             break
