@@ -13,10 +13,21 @@ x = pickle.load(open("xblack_raw.pickle","rb"))
 y = pickle.load(open("yblack_raw.pickle","rb"))
 
 #normalisation
-x=x/255.0
+trainlabel = y
+trainimages = x
+traingen=ImageDataGenerator(rotation_range=40,
+                            zoom_range=0.2,
+                            width_shift_range=0.2,
+                            height_shift_range=0.2,
+                            shear_range=0.2,
+                            horizontal_flip=True,
+                            rescale=1/255.0,
+                            validation_split=0.2)
 
-traingen=ImageDataGenerator(rotation_range=40,zoom_range=0.2,width_shift_range=0.2,height_shift_range=0.2,
-                  shear_range=0.2,horizontal_flip=True,rescale=1/255.0,validation_split=0.2)
+traindata_generator = traingen.flow(trainimages,trainlabel,subset='training')
+validationdata_generator = traingen.flow(trainimages,trainlabel,subset='validation')
+
+print(traindata_generator)
 
 model = Sequential() #a sequential cnn model to create
 
@@ -80,5 +91,5 @@ model.compile(loss="sparse_categorical_crossentropy",
                         optimizer='adam',
                         metrics=['accuracy'])
 model.summary()
-model.fit(x, y, batch_size=4, epochs=2, validation_split=0.1 ) # change parameters to increase accuracy of data
+model.fit(traindata_generator, batch_size=4, epochs=2, validation_data=validationdata_generator ) # change parameters to increase accuracy of data
 model.save('model_name.model')#finally saving the model

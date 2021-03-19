@@ -15,7 +15,7 @@ def cropIt(gray,top=10,left=290,right=290,down=10):
     return croped_image
 
 #to normalize the images to same no. of pixels
-def resizeIt(img,size=100,median=8):
+def resizeIt(img,size=100,median=5):
     img=np.float32(img)
     r,c=img.shape
     #filtering then resizing image

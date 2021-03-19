@@ -14,7 +14,7 @@ def cropIt(gray,top=10,left=290,right=290,down=10):
     return croped_image
 
 #to normalize the images to same no. of pixels
-def resizeIt(img,size=200,median=8):
+def resizeIt(img,size=200,median=5):
     img=np.float32(img)
     r,c=img.shape
     #filtering then resizing image
@@ -57,10 +57,10 @@ for category in ALPHABET:
 
         class_num =ALPHABET.index(category)
         training_data.append([img_processed, class_num])  # add image and classification to our training_data
+        break
     
         if cv2.waitKey(1) & 0xFF == ord('q'):#break ongoing process by Q
             break
-
 
 cv2.destroyAllWindows()
 print("-------------Ultimated processing-----------------")
@@ -82,11 +82,11 @@ y = np.array(y)
 #Let's save this data, so that we don't need to keep calculating it every time we want to play with the neural network model:
 import pickle
 
-pickle_out = open("xblack_raw.pickle","wb")
+pickle_out = open("x0.pickle","wb")
 pickle.dump(x, pickle_out)
 pickle_out.close()
 
-pickle_out = open("yblack_raw.pickle","wb")
+pickle_out = open("y0.pickle","wb")
 pickle.dump(y, pickle_out)
 pickle_out.close()
 print('Pickle file created successfully if named <X.pickle> and <Y.pickle> !!!')
