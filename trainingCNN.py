@@ -82,7 +82,6 @@ for dense_layer in dense_layers:
             for l in range(dense_layer):
                 model.add(Dense(layer_size))
                 model.add(Activation('relu'))
-
             model.add(Dense(26))
             model.add(Activation('softmax'))#activation function
 '''
@@ -93,3 +92,6 @@ model.compile(loss="sparse_categorical_crossentropy",
 model.summary()
 model.fit(traindata_generator, batch_size=4, epochs=2, validation_data=validationdata_generator ) # change parameters to increase accuracy of data
 model.save('model_name.model')#finally saving the model
+
+model.save('model_name.model')//finally saving the model
+
