@@ -49,7 +49,7 @@ while(True):
 
     # Display the resulting frame
     cv2.imshow('testing this',np.uint8(img_test))
-    IMG_SIZE = 128
+    IMG_SIZE = 200
     prediction = model.predict([img_test.reshape(-1, IMG_SIZE, IMG_SIZE, 1)])
     #print(img_test)
     
@@ -102,7 +102,7 @@ def prepare(filepath):
 
 model = tf.keras.models.load_model("model_name.model")
 
-//test image is given as jpg format here
+#test image is given as jpg format here
 prediction = model.predict([prepare('test0.jpg')])
 print(prediction)  # will be a list in a list.
 print(ALPHABET[int(prediction[0][0])])
