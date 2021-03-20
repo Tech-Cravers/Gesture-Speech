@@ -14,7 +14,7 @@ def cropIt(gray,top=10,left=290,right=290,down=10):
     return croped_image
 
 #to normalize the images to same no. of pixels
-def resizeIt(img,size=200,median=5):
+def resizeIt(img,size=100,median=5):
     img=np.float32(img)
     r,c=img.shape
     #filtering then resizing image
@@ -23,7 +23,7 @@ def resizeIt(img,size=200,median=5):
     return np.uint8(filtered_img)
 
 def preprocessing(img0):
-    IMG_SIZE=200
+    IMG_SIZE=100
     img_resized=resizeIt(img0,IMG_SIZE,5) # resize to normalize data size
     #ret,imgTh0=cv2.threshold(img_resized, 20, 255,cv2.THRESH_BINARY)
     imgTh=cv2.adaptiveThreshold(img_resized,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,7,5)
@@ -43,7 +43,7 @@ for i in range(0, 26):
 training_data=[] # [ feature , label ]format 
 print(ALPHABET)
 
-IMG_SIZE=200
+IMG_SIZE=100
 #to iterate over every alphabet
 for category in ALPHABET:
     path = os.path.join(DATADIR,category)  # create path to directory
@@ -57,7 +57,7 @@ for category in ALPHABET:
 
         class_num =ALPHABET.index(category)
         training_data.append([img_processed, class_num])  # add image and classification to our training_data
-        break
+        
     
         if cv2.waitKey(1) & 0xFF == ord('q'):#break ongoing process by Q
             break
@@ -82,11 +82,11 @@ y = np.array(y)
 #Let's save this data, so that we don't need to keep calculating it every time we want to play with the neural network model:
 import pickle
 
-pickle_out = open("x0.pickle","wb")
+pickle_out = open("x.pickle","wb")
 pickle.dump(x, pickle_out)
 pickle_out.close()
 
-pickle_out = open("y0.pickle","wb")
+pickle_out = open("y.pickle","wb")
 pickle.dump(y, pickle_out)
 pickle_out.close()
 print('Pickle file created successfully if named <X.pickle> and <Y.pickle> !!!')
