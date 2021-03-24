@@ -13,19 +13,19 @@ def cropIt(gray,top=10,left=290,right=290,down=10):
     return croped_image
 
 #to normalize the images to same no. of pixels
-def resizeIt(img,size=100):
+def resizeIt(img,size=100,median_val=1):
     img=np.float32(img)
     r,c=img.shape
     #filtering then resizing image
     resized_img=cv2.resize(img,(size,size))
-    filtered_img=sci.median_filter(resized_img,8)
+    filtered_img=sci.median_filter(resized_img,median_val)
     return np.uint8(filtered_img)
 
 
 #choose the directory u want to process in which video data is present 
 # videos must be named after the small case letter, it represents in gesture of hand
 DATADIR = "D:\Project\gesture-Speech\\videoData"
-PROC_DIR= "D:\Project\gesture-Speech\\processed_image"
+PROC_DIR= "D:\Project\gesture-Speech\\pic_data mix"
 
 ALPHABET = [] #array containing letters to categorize and create path to video
 alpha = 'a'
@@ -38,13 +38,13 @@ print(ALPHABET)
 #to iterate over every alphabet
 for category in ALPHABET:
     path = os.path.join(DATADIR,category)+'.mp4'  # create path to video file
-#    print(path)
+    print(path)
     cap = cv2.VideoCapture(path) #to load video file 
 
     #counting frames processed
     count = 0
     #stores index of every alphabet to categorize
-    class_num =ALPHABET.index(category) # get the classification  (0 or 1 or 2 and soo on). 0=a 1=b 2=c ...
+    class_num = ALPHABET.index(category) # get the classification  (0 or 1 or 2 and soo on). 0=a 1=b 2=c ...
 #    print(class_num)
 
     #iterates over every frame of video
@@ -61,25 +61,11 @@ for category in ALPHABET:
         #cv2.imshow('input gray',gray)
         #cv2.waitKey(0)
 
-        #cropping using custom function
-        croped_img=cropIt(gray) #cropping image to get symmetric dimensions
-        #cv2.imshow('cropped',croped_image)
-        #cv2.waitKey(0)
-
         #normalising using custom function
-        IMG_SIZE=500
-        resized_img=resizeIt(croped_img,IMG_SIZE) # resize to normalize data size
+        IMG_SIZE=100
+        resized_img=resizeIt(gray,IMG_SIZE) # resize to normalize data size
         #cv2.imshow('resized',resized_img)
         #cv2.waitKey(0)
-
-        #canny not using 
-        '''
-        edge_map = cv2.Canny(resized_img,50,150)
-        img = edge_map
-        cv2.imshow('Result',img)# to give visual of each frame being processed
-        #cv2.waitKey(0)
-        '''
-        training_data.append([img, class_num])  # add image and classification to our training_data
 
         #use to save images
         newpath = r'D:\\Project\\gesture-Speech\\processed_image\\' 
@@ -87,8 +73,8 @@ for category in ALPHABET:
         if not os.path.exists(newpath):
             os.makedirs(newpath)# create folder if not present
         
-        full_path = os.path.join(PROC_DIR,category,str(count))+'.bmp'
-        cv2.imwrite(full_path, img)
+        full_path = os.path.join(PROC_DIR,category,str(count))+'.jpg'
+        cv2.imwrite(full_path,resized_img)
         count=count+1 #updating to next value
         print("saved image no. "+str(count)+" to location : "+full_path)
 
@@ -99,41 +85,6 @@ for category in ALPHABET:
     cap.release()
     cv2.destroyAllWindows()
     
-    print('---------------Completed: '+category+' !!!------------------')    
-
-    #if input("Enter 'stop' to inturrupt otherwise press anything:")=='stop':
-    #    break   
+    print('---------------Completed: '+category+' !!!------------------')     
 
 print("-------------Ultimated processing-----------------")
-
-import random
-
-random.shuffle(training_data)
-
-x = []
-y = []
-
-for features,label in training_data:
-    x.append(features)
-    y.append(label)
-
-x = np.array(x).reshape(-1, IMG_SIZE, IMG_SIZE, 1)
-y = np.array(y)
-
-#Let's save this data, so that we don't need to keep calculating it every time we want to play with the neural network model:
-import pickle
-
-pickle_out = open("x.pickle","wb")
-pickle.dump(x, pickle_out)
-pickle_out.close()
-
-pickle_out = open("y.pickle","wb")
-pickle.dump(y, pickle_out)
-pickle_out.close()
-print('Pickle file created successfully named <X.pickle> and <Y.pickle> !!!')
-print('We can always load it in to our current script, or a totally new one by doing:')
-print('pickle_in = open("X.pickle","rb")')
-print('X = pickle.load(pickle_in)')
-print('pickle_in = open("y.pickle","rb")')
-print('y = pickle.load(pickle_in)')
-print('Thank you :)')
