@@ -35,7 +35,7 @@ for i in range(0, 27):
 prev=""
 model = tf.keras.models.load_model("model_name.model")
 cap = cv2.VideoCapture(0) #to load video file 
-
+count = 0
 while(True):
     # Capture frame-by-frame
     ret, frame = cap.read()
@@ -64,35 +64,26 @@ while(True):
     #print(img_test)
     
     text = ALPHABET[int(np.argmax(prediction[0]))]
-
-    now=text
-    if now!=prev:
+    print(text)
+    if (count>25):
         print(text)
+        myobj = gTTS(text=text, lang='en', slow=False) 
+        if os.path.exists("audio.mp3"):
+            os.remove("audio.mp3")
+        myobj.save("audio.mp3") 
+        # Playing the converted file 
+        os.system("mpg123 welcome.mp3")
+        from playsound import playsound
+        playsound('audio.mp3')
+
+        count=0
+    now=text
+    if now==prev:
+        count=count+1
+    else:
+        count=1
     prev=text
-
-    '''
-    # The text that you want to convert to audio 
-    mytext = str(text)
-  
-    # Language in which you want to convert 
-    language = 'en'
-  
-    # Passing the text and language to the engine,  
-    # here we have marked slow=False. Which tells  
-    # the module that the converted audio should  
-    # have a high speed 
-    myobj = gTTS(text=mytext, lang=language, slow=False) 
-  
-    # Saving the converted audio in a mp3 file named 
-    # welcome  
-    myobj.save("audio.mp3") 
-
-    # Playing the converted file 
-    os.system("mpg123 welcome.mp3")
     
-    from playsound import playsound
-    playsound('audio.mp3')
-    '''
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
     
