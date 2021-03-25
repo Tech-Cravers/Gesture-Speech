@@ -37,7 +37,7 @@ DATADIR = "D:\Project\gesture-Speech\dataset_20"
 
 ALPHABET = [] #array containing letters to categorize and create path to video
 alpha = 'a'
-for i in range(0, 26): # { indicate there is no alpabet there additional feature to add
+for i in range(0, 27): # { indicate there is no alpabet there additional feature to add
     ALPHABET.append(alpha) 
     alpha = chr(ord(alpha) + 1)
 

@@ -51,7 +51,7 @@ model.add(Flatten())
 model.add(Dense(256))
 model.add(Activation('relu'))
 model.add(Dropout(0.2))
-model.add(Dense(26))#extra 1 output to find if no alphabet is detected 26 alphabets
+model.add(Dense(27))#extra 1 output to find if no alphabet is detected 26 alphabets
 model.add(Activation('softmax'))#activation function
 
 opt=tf.keras.optimizers.Adam(learning_rate=0.001)#prev value: 1e-7
