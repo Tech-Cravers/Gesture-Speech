@@ -3,6 +3,7 @@ import tensorflow as tf
 import numpy as np
 import scipy.ndimage as sci
 from gtts import gTTS
+import time
 
 # This module is imported so that we can  
 # play the converted audio 
@@ -21,10 +22,21 @@ def preprocessing(img0,IMG_SIZE=100):
     img_resized=resizeIt(img0,IMG_SIZE,1) # resize to normalize data size
     #cv2.imshow("intermidieate",img_resized)
     img_blur = cv2.GaussianBlur(img_resized,(5,5),0)
-    ret,img_th = cv2.threshold(img_blur,30,255,cv2.THRESH_TOZERO+cv2.THRESH_OTSU)  
-    imgTh=cv2.adaptiveThreshold(img_th ,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,5,40)
+    ret,img_th = cv2.threshold(img_blur,0,255,cv2.THRESH_TOZERO+cv2.THRESH_OTSU)
+    imgTh=cv2.adaptiveThreshold(img_th,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,5,10)
     #edges = cv2.Canny(img_resized,170, 300)
-    return img_th
+    return imgTh
+
+def playText(text):
+    myobj = gTTS(text=text, lang='en', slow=False) 
+    if os.path.exists("audio.mp3"):
+        os.remove("audio.mp3")
+    myobj.save("audio.mp3") 
+    # Playing the converted file 
+    os.system("mpg123 welcome.mp3")
+    from playsound import playsound
+    playsound('audio.mp3')
+    return 0
 
 ALPHABET = [] #array containing letters to categorize 
 alpha = 'a'
@@ -36,6 +48,9 @@ prev=""
 model = tf.keras.models.load_model("model_name.model")
 cap = cv2.VideoCapture(0) #to load video file 
 count = 0
+buffer = []
+prev_time = time.time()
+word = ''
 while(True):
     # Capture frame-by-frame
     ret, frame = cap.read()
@@ -64,26 +79,27 @@ while(True):
     #print(img_test)
     
     text = ALPHABET[int(np.argmax(prediction[0]))]
-    print(text)
-    if (count>25):
-        print(text)
-        myobj = gTTS(text=text, lang='en', slow=False) 
-        if os.path.exists("audio.mp3"):
-            os.remove("audio.mp3")
-        myobj.save("audio.mp3") 
-        # Playing the converted file 
-        os.system("mpg123 welcome.mp3")
-        from playsound import playsound
-        playsound('audio.mp3')
+    print('Alphabet: '+text+' Word: '+word+'Time Required: '+str(time.time()-prev_time))
+    prev_time = time.time()
+    no_frames = 50
 
+    count = count + 1
+    buffer.append(text)
+    print(buffer)
+    if (count > no_frames) :
+        text = max(set(buffer),key = text.count) #finding mode of buffer of letters
+        
+        playText(text)
+        
         count=0
-    now=text
-    if now==prev:
-        count=count+1
-    else:
-        count=1
-    prev=text
-    
+        buffer = []
+        if( text =='{'):
+            word = word + ' '
+        else:
+            word = word + text
+            
+        playText(word)
+
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
     

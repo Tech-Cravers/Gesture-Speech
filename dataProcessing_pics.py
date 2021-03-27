@@ -26,10 +26,10 @@ def preprocessing(img0,IMG_SIZE=100):
     img_resized=resizeIt(img0,IMG_SIZE,1) # resize to normalize data size
     #cv2.imshow("intermidieate",img_resized)
     img_blur = cv2.GaussianBlur(img_resized,(5,5),0)
-    ret,img_th = cv2.threshold(img_blur,30,255,cv2.THRESH_TOZERO+cv2.THRESH_OTSU)  
-    imgTh=cv2.adaptiveThreshold(img_th,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,5,40)
+    ret,img_th = cv2.threshold(img_blur,0,255,cv2.THRESH_TOZERO+cv2.THRESH_OTSU)
+    imgTh=cv2.adaptiveThreshold(img_th,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,5,10)
     #edges = cv2.Canny(img_resized,170, 300)
-    return img_th
+    return imgTh
 
 #choose the directory u want to process in which video data is present 
 # videos must be named after the small case letter, it represents in gesture of hand
@@ -54,14 +54,15 @@ for category in ALPHABET:
         #print(img_path)
         img0 = cv2.imread(os.path.join(path,img_path) ,cv2.IMREAD_GRAYSCALE)  # convert to array
         img_processed=preprocessing(img0,IMG_SIZE)
-        #cv2.imshow("input",img_processed)
-        #cv2.waitKey(1)
+        cv2.imshow("input",img_processed)
+        cv2.waitKey(1)
 
         class_num =ALPHABET.index(category)
         training_data.append([img_processed, class_num])  # add image and classification to our training_data
         
         if cv2.waitKey(1) & 0xFF == ord('q'):#break ongoing process by Q
             break
+
 
 cv2.destroyAllWindows()
 print("-------------Ultimated processing-----------------")

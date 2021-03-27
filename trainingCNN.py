@@ -54,7 +54,7 @@ model.add(Dropout(0.2))
 model.add(Dense(27))#extra 1 output to find if no alphabet is detected 26 alphabets
 model.add(Activation('softmax'))#activation function
 
-opt=tf.keras.optimizers.Adam(learning_rate=0.001)#prev value: 1e-7
+opt=tf.keras.optimizers.Adam(learning_rate=1e-7)#prev value: 1e-7
 model.compile(loss="sparse_categorical_crossentropy",
                         optimizer='adam',
                         metrics=['accuracy'])
