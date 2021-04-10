@@ -14,22 +14,7 @@ y = pickle.load(open("y.pickle","rb"))
 
 x = x/255.0
 #normalisation
-'''
-trainlabel = y
-trainimages = x
-traingen=ImageDataGenerator(rotation_range=40,
-                            zoom_range=0.2,
-                            width_shift_range=0.2,
-                            height_shift_range=0.2,
-                            shear_range=0.2,
-                            fill_mode='nearest',
-                            horizontal_flip=True,
-                            rescale=1/255.0,
-                            validation_split=0.1)
 
-traindata_generator = traingen.flow(trainimages,trainlabel,subset='training')
-validationdata_generator = traingen.flow(trainimages,trainlabel,subset='validation')
-'''
 model = Sequential() #a sequential cnn model to create
 
 #added a neuron to network
@@ -59,5 +44,21 @@ model.compile(loss="sparse_categorical_crossentropy",
                         optimizer='adam',
                         metrics=['accuracy'])
 model.summary()
-model.fit(x,y, batch_size=5, epochs=2, validation_split = 0.1 ) # change parameters to increase accuracy of data
+
+trainlabel = y
+trainimages = x
+traingen=ImageDataGenerator(rotation_range=40,
+                            zoom_range=0.2,
+                            width_shift_range=0.2,
+                            height_shift_range=0.2,
+                            shear_range=0.2,
+                            fill_mode='nearest',
+                            horizontal_flip=True,
+                            rescale=1/255.0,
+                            validation_split=0.1)
+
+traindata_generator = traingen.flow(trainimages,trainlabel,subset='training')
+validationdata_generator = traingen.flow(trainimages,trainlabel,subset='validation')
+model.fit(x,y, batch_size=5, epochs=2, validation_data = trainlabel  ) # change parameters to increase accuracy of data
+
 model.save('model_name.model')#finally saving the model

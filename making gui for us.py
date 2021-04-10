@@ -4,8 +4,6 @@ import numpy as np
 import scipy.ndimage as sci
 from gtts import gTTS
 import time
-import tkinter as tk
-from textblob import TextBlob
 
 # This module is imported so that we can  
 # play the converted audio 
@@ -29,13 +27,13 @@ def preprocessing(img0,IMG_SIZE=100):
     #edges = cv2.Canny(img_resized,170, 300)
     return imgTh
 
-def playText(text,lang='en'):
-    myobj = gTTS(text=text, lang=lang , slow=False) 
+def playText(text):
+    myobj = gTTS(text=text, lang='en', slow=False) 
     if os.path.exists("audio.mp3"):
         os.remove("audio.mp3")
     myobj.save("audio.mp3") 
     # Playing the converted file 
-    #os.system("mpg123 welcome.mp3")
+    os.system("mpg123 welcome.mp3")
     from playsound import playsound
     playsound('audio.mp3')
     return 0
@@ -53,7 +51,6 @@ count = 0
 buffer = []
 prev_time = time.time()
 word = ''
-sentence = ''
 while(True):
     # Capture frame-by-frame
     ret, frame = cap.read()
@@ -82,8 +79,7 @@ while(True):
     #print(img_test)
     
     text = ALPHABET[int(np.argmax(prediction[0]))]
-    _ = os.system('cls')
-    print('Alphabet: '+text+' Word: '+word+' Sentence: '+sentence+' Time Required: '+str(time.time()-prev_time))
+    print('Alphabet: '+text+' Word: '+word+'Time Required: '+str(time.time()-prev_time))
     prev_time = time.time()
     no_frames = 50
 
@@ -92,20 +88,16 @@ while(True):
     print(buffer)
     if (count > no_frames) :
         text = max(set(buffer),key = text.count) #finding mode of buffer of letters
-        try:
-            playText(text)
-        except:
-            print("Try again!!")
+        
+        playText(text)
         
         count=0
         buffer = []
         if( text =='{'):
-            word = str(TextBlob(word).correct())
-            sentence = sentence + word + ' '
-            word = ""
-
+            word = word + ' '
         else:
             word = word + text
+            
         playText(word)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
