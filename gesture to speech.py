@@ -24,13 +24,14 @@ def preprocessing(img0,IMG_SIZE=100):
     img_resized=resizeIt(img0,IMG_SIZE,1) # resize to normalize data size
     #cv2.imshow("intermidieate",img_resized)
     img_blur = cv2.GaussianBlur(img_resized,(5,5),0)
-    ret,img_th = cv2.threshold(img_blur,0,255,cv2.THRESH_TOZERO+cv2.THRESH_OTSU)
-    imgTh=cv2.adaptiveThreshold(img_th,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,5,10)
-    #edges = cv2.Canny(img_resized,170, 300)
-    return imgTh
+    imgTh=cv2.adaptiveThreshold(img_blur,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,7,3)
+    ret,img_th = cv2.threshold(imgTh,0,255,cv2.THRESH_TOZERO+cv2.THRESH_OTSU)
 
-def playText(text,lang='en'):
-    myobj = gTTS(text=text, lang=lang , slow=False) 
+    #edges = cv2.Canny(img_resized,170, 300)
+    return img_th
+
+def playText(text):
+    myobj = gTTS(text=text, lang='en' , slow=False) 
     if os.path.exists("audio.mp3"):
         os.remove("audio.mp3")
     myobj.save("audio.mp3") 
@@ -52,8 +53,8 @@ cap = cv2.VideoCapture(0) #to load video file
 count = 0
 buffer = []
 prev_time = time.time()
-word = ''
-sentence = ''
+word = ' '
+sentence = ' '
 while(True):
     # Capture frame-by-frame
     ret, frame = cap.read()
@@ -100,12 +101,11 @@ while(True):
         count=0
         buffer = []
         if( text =='{'):
-            word = str(TextBlob(word).correct())
-            sentence = sentence + word + ' '
-            word = ""
-
+            word = word + ' '
+            
         else:
             word = word + text
+            
         playText(word)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):

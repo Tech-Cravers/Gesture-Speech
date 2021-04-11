@@ -21,10 +21,11 @@ def preprocessing(img0,IMG_SIZE=100):
     img_resized=resizeIt(img0,IMG_SIZE,1) # resize to normalize data size
     #cv2.imshow("intermidieate",img_resized)
     img_blur = cv2.GaussianBlur(img_resized,(5,5),0)
-    ret,img_th = cv2.threshold(img_blur,0,255,cv2.THRESH_TOZERO+cv2.THRESH_OTSU)
-    imgTh=cv2.adaptiveThreshold(img_th,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,5,10)
+    imgTh=cv2.adaptiveThreshold(img_blur,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,7,3)
+    ret,img_th = cv2.threshold(imgTh,0,255,cv2.THRESH_TOZERO+cv2.THRESH_OTSU)
+
     #edges = cv2.Canny(img_resized,170, 300)
-    return imgTh
+    return img_th
 
 ALPHABET = [] #array containing letters to categorize 
 alpha = 'a'
