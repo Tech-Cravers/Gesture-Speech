@@ -66,6 +66,7 @@ while(True):
     #print(img_test)
     
     text = ALPHABET[int(np.argmax(prediction[0]))]
+    _ = os.system('cls')
     print('Alphabet: '+text+' Time Required: '+str(time.time()-prev_time))
     prev_time = time.time()
 
