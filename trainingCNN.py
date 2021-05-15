@@ -44,6 +44,7 @@ model.compile(loss="sparse_categorical_crossentropy",
                         optimizer='adam',
                         metrics=['accuracy']) 
 model.summary()
+'''
 NUM_TRAIN_IMAGES = len(y)*0.009
 NUM_TEST_IMAGES = len(y)*0.001
 NUM_EPOCHS = 20 
@@ -63,11 +64,14 @@ traingen=ImageDataGenerator(rotation_range=40,
 
 traindata_generator = traingen.flow(trainimages,trainlabel,subset='training')
 validationdata_generator = traingen.flow(trainimages,trainlabel,subset='validation')
-#model.fit(x,y, batch_size=5, epochs=2, validation_split=0.1  ) # change parameters to increase accuracy of data
+'''
+model.fit(x,y, batch_size=5, epochs=2, validation_split=0.1) # change parameters to increase accuracy of data
+'''
 H = model.fit(
 	x=traindata_generator,
 	steps_per_epoch=NUM_TRAIN_IMAGES // BS,
 	validation_data=validationdata_generator,
 	validation_steps=NUM_TEST_IMAGES // BS,
 	epochs=NUM_EPOCHS)
+'''
 model.save('model_name.model')#finally saving the model

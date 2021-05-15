@@ -4,7 +4,6 @@ import numpy as np
 import scipy.ndimage as sci
 from gtts import gTTS
 import time
-import tkinter as tk
 from textblob import TextBlob
 
 # This module is imported so that we can  
