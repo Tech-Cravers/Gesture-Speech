@@ -1,9 +1,10 @@
-pip install opencv-python
-pip install tensorflow 
-pip install scipy 
-pip install numpy 
-pip install gTTS 
-pip install tKinter 
-pip install speech_recognition 
-pip install pyAudio 
-pip install matplotlib
+matplotlib==3.3.2
+numpy==1.19.2
+Pillow==8.0.1
+opencv-python==4.4.0.44
+tensorflow==2.4.1
+gTTS==2.2.2
+tKinter 
+speech_recognition==3.8.1
+pyAudio==0.2.11
+
