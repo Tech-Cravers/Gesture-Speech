@@ -11,3 +11,5 @@ Figure displaying a frame of the speech converted text of alphabet ‘E’ of th
 
 Figure showing console detecting the speech and a frame is shown representing ‘A’ alphabet in ISL language alphabet
 ![image](https://user-images.githubusercontent.com/44629500/126100960-d64396c7-0fe1-425b-8a8f-ee3ecf9ac447.png)
+
+DATASET : https://www.kaggle.com/datasets/rushilverma07/indian-sign-language-alphabet-dataset
